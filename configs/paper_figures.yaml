@@ -1,0 +1,78 @@
+# Figures and tables of the L4DC paper (scripts/paper_figures.py). Inputs are the
+# runs named in configs/runs.yaml; nothing reruns. This file holds display settings.
+# Study keys: s6b double integrator, s2 transmission, s3 feeder, s4 Hopper, s5 Covasim.
+comparison_config: configs/method_comparison.yaml
+evaluation_config: configs/evaluation_dimensions.yaml   # targets of fig_decisions
+double_integrator:   # exact limit; the run directory comes from configs/runs.yaml
+  report_grid_step: 0.0005   # unit stress; 2,001-point report grid
+  labels: {existence-bracket-greedy: greedy, joint-config-existence: config,
+           random-joint-existence: random, uncertified-sup-bisection: sup-bisection,
+           uncertified-direct-score: direct-score}
+  # Display settings for the cross-study figures (physical stress = 1.5 c; the limit
+  # is c = 2/3, stress 1.0).
+  short: "Double integrator"
+  stress: "Disturbance bound"
+  offset: 0.0
+  scale: 1.5
+  digits: 4
+  evals: "evaluations"
+  budgets: [100, 300, 1000]
+output: {figures: exhibits/figures, tables: exhibits/tables}
+
+# Cross-study figures (fig_overview, fig_accuracy, fig_tightness, fig_efficiency,
+# fig_theory_map): studies in display order, deterministic simulators first.
+cross_study:
+  deterministic: [s6b, s2, s4]
+  noisy: [s3, s5]
+  jitter: {half_width: 0.22, seed: 20261111}   # vertical only; levels are unchanged
+  # Stress axis of fig_overview per study, in physical units. Every returned design
+  # must fall inside (the script stops otherwise); upper bounds beyond the right edge
+  # are drawn at the edge and annotated with their count and median.
+  xlim: {s6b: [0.994, 1.004], s2: [1.19, 1.235], s4: [0.0, 13.5], s3: [0.0, 35.0],
+         s5: [0.8, 4.0]}
+  # Theory-map cells quoted from study records rather than stored rows.
+  record_facts:
+    s4_desk_check: "desk check\nfailed"   # S4 record, gate S4-G4 (4 of 256 flagged)
+
+# Physical stress = offset + scale * c (c is the unit stress level); unit heads the
+# summary-table column. eps: the registered feasible-fraction thresholds (none on
+# Hopper: gate S4-G4 failed).
+studies:
+  s2: {short: "Transmission", stress: "Load multiplier", unit: "multiplier",
+       offset: 1.0, scale: 0.35, digits: 4, evals: "power flows", eps: [0.01, 0.05]}
+  s3: {short: "Feeder", stress: "Demand growth (%)", unit: "growth, \\%",
+       offset: 0.0, scale: 100.0, digits: 2, evals: "checks", eps: [0.01, 0.05]}
+  s4: {short: "Hopper", stress: "Payload (kg)", unit: "payload, kg", offset: 0.0,
+       scale: 20.0, digits: 1, evals: "rollouts", eps: []}
+  s5: {short: "Covasim", stress: "Transmissibility multiplier", unit: "multiplier",
+       offset: 0.8, scale: 3.2, digits: 2, evals: "runs", eps: [0.05, 0.1]}
+
+# Run labels (as stored) and display style; ls is a Matplotlib line style or a dash
+# pattern [on, off, ...] in points; label@study overrides a label in one study. The
+# naive bisection arm uses one stored check per decision (16 conditions on S3, one
+# run on S5); 4x and 16x replication cost 4 and 16 evaluations per decision. ours:
+# true marks the paper's own method, BRINK, with its two sampling rules (bold in
+# tables and in figure row labels).
+arms:
+  witness-focused: {name: "BRINK, proposed search", ours: true, color: "#0072B2",
+                    marker: "o", ls: "-"}
+  greedy: {name: "BRINK, variance-seeking", ours: true, color: "#009E73", marker: "s",
+           ls: "--"}
+  config: {name: "CONFIG adaptation", color: "#56B4E9", marker: "D", ls: "-."}
+  sup-bisection: {name: "Bisection", color: "#D55E00", marker: "v", ls: ":"}
+  baseline-k16@s3: {name: "Bisection", color: "#D55E00", marker: "v", ls: ":"}
+  baseline-k64: {name: "Bisection, 4x replication", color: "#E69F00", marker: "^",
+                 ls: [4, 1.5]}
+  baseline-k256: {name: "Bisection, 16x replication", color: "#8F4400", marker: "<",
+                  ls: [1.5, 1, 4, 1]}
+  baseline-k1: {name: "Bisection", color: "#D55E00", marker: "v", ls: ":"}
+  baseline-k4: {name: "Bisection, 4x replication", color: "#E69F00", marker: "^",
+                ls: [4, 1.5]}
+  baseline-k16@s5: {name: "Bisection, 16x replication", color: "#8F4400",
+                    marker: "<", ls: [1.5, 1, 4, 1]}
+  direct-score: {name: "Direct limit search", color: "#999999", marker: "h", ls: "-"}
+  gp-ucb: {name: "GP-UCB", color: "#CC79A7", marker: "P", ls: "-"}
+  diff-evo: {name: "Differential evolution", color: "#555555", marker: "X",
+             ls: [6, 2]}
+  random: {name: "Random sampling", color: "#000000", marker: "*",
+           ls: [5, 1.5, 1, 1.5, 1, 1.5]}

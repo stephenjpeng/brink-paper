@@ -1,0 +1,74 @@
+# Covasim epidemic policy: constants of every run in the paper.
+# Study key in stored rows and exhibit configs: s5.
+frozen_environment: configs/frozen/covasim.json
+k_runs: 1                  # raw unit: one raw evaluation = one Covasim run
+
+budgets_raw: [1000, 3000]
+seeds: {start: 600, stop: 630}   # 600 to 629; an arm with n_seeds uses the first n_seeds
+
+arms:                      # methods, in sweep order (feeder_sweep.analyze_rows reads it)
+  - {label: witness-focused, name: existence-witness-focused, view: window}
+  - {label: greedy, name: existence-bracket-greedy, view: window, n_seeds: 10}
+  - {label: config, name: joint-config-existence, view: window, n_seeds: 10}
+  - {label: baseline-k1, name: uncertified-sup-bisection, view: predicate, runs: 1}
+  - {label: baseline-k4, name: uncertified-sup-bisection, view: predicate, runs: 4}
+  - {label: baseline-k16, name: uncertified-sup-bisection, view: predicate, runs: 16}
+arm_constants:
+  n_init: 20
+  report_every_calls: 10
+  report_every_raw: 170
+  n_candidates: 2048
+  n_witness_candidates: 2048
+  report_grid_size: 201
+  delta: 0.10
+  variant: noisy
+  bisect_depth: 8
+  cover_n_per_axis: 8
+  blas_threads: 1
+  end_scan: {max_depth: 12, max_cells: 8000000, cap_s: 120}
+
+truth:                     # reference-limit search (Appendix C.5)
+  grid_axis: 7
+  grid_runs: 8
+  bisect_steps: 8
+  stream: [996]
+  refine:
+    - {half_width: 0.14285714285714285, top: 4, runs: 32}
+    - {half_width: 0.03571428571428571, top: 2, runs: 64}
+  near_best: 8
+  replicates: 4
+  replicate_runs: 64
+
+columns:                   # sampled policies behind U_eps (Appendix C.6)
+  n: 59
+  design_stream: [995, 0]
+  rough_stream: [995, 1]
+  rough_runs: 16
+  bisect_steps: 8
+  ladder_step: 0.04
+  ladder_rungs: 8
+  test_runs: 512
+  test_stream: [995, 2]
+  clip: [-1.0, 0.5]
+  delta_score: 0.05
+  eps: [0.05, 0.10]        # primary, secondary
+  delta_order: 0.05
+
+monotone_check:            # persistence check on further policies
+  n_designs: 64
+  stream: [995, 8]
+  c_grid_points: 11
+  runs: 16
+  se_multiplier: 3.0
+
+truth_check: {runs: 128, stream: [994], stream_offset: 1000}   # design check
+
+
+gates:                     # internal gate tests of analyze
+  g1_violation_delta: 0.10
+  g1_witness_feasible_min: 0.95
+  g2_witness_rate_null: 0.85
+  g3_wrong_rate_null: 0.5
+  alpha: 0.05
+  hardened_gap_tolerance: 0.05
+  register_g3: true

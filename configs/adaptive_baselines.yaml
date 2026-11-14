@@ -1,0 +1,45 @@
+# GP-UCB and differential evolution on the applied studies (s2 to s5).
+# Environments, budgets, seeds, predicates, method constants (n_init,
+# n_candidates, delta, report_every_raw), and design checks come from each
+# base_config. Method settings live in src/brink/adaptive_baselines.py.
+arms:                         # sweep order
+  - {label: gp-ucb, name: uncertified-gp-ucb}
+  - {label: diff-evo, name: uncertified-diff-evo}
+task_index_base: 20000        # check streams disjoint from the base sweeps and S7
+study_index_stride: 1000      # task index = base + stride * study position + i
+
+studies:                      # sweep order; runs_key names the study sweep in runs.yaml
+  s2:
+    base_config: configs/transmission.yaml
+    predicate: {}             # deterministic raw power-flow predicate
+    runs_key: transmission_sweep
+    naive_label: sup-bisection
+    est_s_per_raw: 0.051      # scheduling only: base sup-bisection rows (x86)
+  s3:
+    base_config: configs/feeder.yaml
+    predicate: {snapshots: 16}   # the naive K = 16 predicate of baseline-k16
+    runs_key: feeder_sweep
+    naive_label: baseline-k16
+    est_s_per_raw: 0.0075     # base baseline-k16 rows (laptop)
+  s4:
+    base_config: configs/hopper.yaml
+    predicate: {}             # one 1000-step rollout at reset seed 0
+    runs_key: hopper_sweep
+    naive_label: sup-bisection
+    est_s_per_raw: 0.13       # base sup-bisection rows (x86)
+  s5:
+    base_config: configs/covasim.yaml
+    predicate: {runs: 1}      # the naive one-run predicate of baseline-k1
+    runs_key: covasim_sweep
+    naive_label: baseline-k1
+    est_s_per_raw: 2.1        # base baseline-k1 rows (x86)
+
+
+# Rows written under the original config file of the reported runs (same constants,
+# result paths inside the file) are accepted by analyze and the exhibit scripts.
+equivalent_config_sha256:
+  - 59ab7833cc12346d34898030f4a880c8becca9d2d7f4e68407545ed44f58a32d
+
+analysis:                     # paired comparisons (no gate)
+  alpha: 0.05
+  wrong_rate_null: 0.5        # failing-design test, noisy studies only

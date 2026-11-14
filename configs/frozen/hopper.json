@@ -1,0 +1,41 @@
+{
+  "calibration": {
+    "experiment": "mujoco_hopper_s4",
+    "x_dim": 3,
+    "m": 1,
+    "scaler_median": [
+      0.4652839804669384
+    ],
+    "scaler_scale": [
+      0.372367791921854
+    ],
+    "crash_margin": 3.0,
+    "n_crashed": 0,
+    "median_pairwise_distance_x": 0.6638839132576941,
+    "lengthscale_multiplier": 2.0,
+    "lengthscale": 1.3277678265153883,
+    "cv_rmse_by_multiplier": {
+      "0.5": 0.45016051902044296,
+      "1.0": 0.18255299690315313,
+      "2.0": 0.1291398594925603
+    },
+    "B": [
+      857.3881747385143
+    ],
+    "B_slice": [
+      486.6723509371786
+    ],
+    "R": 0.0,
+    "lam": 1e-06,
+    "r2_holdout": [
+      0.9768180526394895
+    ],
+    "r2_ok": true,
+    "seeds": {
+      "sobol": 9001,
+      "uniform": 9002,
+      "split": 9003
+    },
+    "clip": false
+  }
+}

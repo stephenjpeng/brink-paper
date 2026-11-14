@@ -1,0 +1,60 @@
+# Transmission network (IEEE 39-bus): constants of every run in the paper.
+# Study key in stored rows and exhibit configs: s2.
+frozen_environment: configs/frozen/transmission.json
+truth:                     # reported reference limit (analyze checks the truth run against it)
+  theta_exists_unit: 0.639168
+  err_unit: 3.7e-4         # stated error; truth interval [0.638798, 0.639538]
+  grid_columns: 6561       # the 9^4 grid: first rows of truth_columns.npz
+
+budgets_raw: [5000, 17000]
+seeds: {start: 600, stop: 650}   # 600 to 649
+
+arms:                      # methods, in sweep order
+  - {label: witness-focused, name: existence-witness-focused, view: window}
+  - {label: greedy, name: existence-bracket-greedy, view: window}
+  - {label: config, name: joint-config-existence, view: window}
+  - {label: sup-bisection, name: uncertified-sup-bisection, view: predicate}
+  - {label: direct-score, name: uncertified-direct-score, view: score}
+arm_constants:
+  n_init: 20
+  report_every_calls: 10   # window arms
+  report_every_raw: 170    # predicate and score arms
+  n_candidates: 2048
+  n_witness_candidates: 2048
+  report_grid_size: 201
+  delta: 0.10
+  variant: deterministic
+  lam: 1.0e-6
+  R: 0.0
+  bisect_depth: 8
+  cover_n_per_axis: 8
+  blas_threads: 1
+  # One infeasibility test per run, on the upper-window constraint only (channel 1),
+  # with the derivative-based refinement (Appendix C.3).
+  end_scan: {max_depth: 12, max_cells: 8000000, cap_s: 2200, second_order: true,
+             channels: [1]}
+
+columns:                   # sampled designs behind U_eps (Appendix C.6)
+  n: 628
+  design_stream: [997, 0]
+  score_pad: 1.220703125e-4   # 2^-13 (construction S2-S1)
+  eps: [0.01, 0.05]           # primary, secondary
+  delta_order: 0.05
+
+monotone_check:            # single-window check on further designs
+  n_designs: 256
+  stream: [997, 8]
+  c_grid_points: 201
+  tol: 1.220703125e-4
+
+
+
+gates:                     # internal gate tests of analyze, n = 50 per cell
+  alpha: 0.05
+  g1_violation_delta: 0.10
+  g1_witness_feasible_min: 0.95
+  g2_witness_rate_null: 0.85
+  g2_median_lower_min: 0.5706   # theta_0.01 of the truth grid
+  g3_grid_fraction_max: 0.01
+  g4_violation_delta: 0.10
+  g4_certificate_rate_null: 0.85

@@ -1,0 +1,88 @@
+{
+  "environment": {
+    "covasim": "3.1.9",
+    "pop_size": 20000,
+    "n_days": 120,
+    "pop_infected": 20,
+    "pop_type": "random",
+    "use_waning": false,
+    "base_beta": 0.016,
+    "c_range": [
+      0.8,
+      4.0
+    ],
+    "test_max": 0.3,
+    "trace_max": 0.9,
+    "start_day_max": 60,
+    "cost_cap": 40.0,
+    "distancing_factor": 0.5,
+    "capacity_fraction": 0.003,
+    "x_map": "budget-share coordinates (covasim_policy.to_policy)",
+    "oracle": "P5 prefix window channel over the K-run mean-margin predicate",
+    "prefix_no_window_step": 0.005
+  },
+  "calibration": {
+    "experiment": "covasim-policy-s5",
+    "x_dim": 3,
+    "m": 1,
+    "scaler_median": [
+      0.313520338897044
+    ],
+    "scaler_scale": [
+      0.3686759584824722
+    ],
+    "crash_margin": 3.0,
+    "n_crashed": 0,
+    "median_pairwise_distance_x": 0.6638839132576941,
+    "lengthscale_multiplier": 2.0,
+    "lengthscale": 1.3277678265153883,
+    "cv_rmse_by_multiplier": {
+      "0.5": 0.36252544739717196,
+      "1.0": 0.11043132788621238,
+      "2.0": 0.0864231434114687
+    },
+    "B": [
+      19.21180214177816
+    ],
+    "B_slice": [
+      11.390537266585708
+    ],
+    "R": 0.08075364828674739,
+    "lam": 0.006521151711619699,
+    "r2_holdout": [
+      0.9920098263115219
+    ],
+    "r2_ok": true,
+    "seeds": {
+      "sobol": 9001,
+      "uniform": 9002,
+      "split": 9003
+    },
+    "clip": false
+  },
+  "noise_scale": {
+    "recipe": "Section 3.2 step 5 on the K = 1 prefix channel",
+    "by_knob": {
+      "1": {
+        "R": 0.08075364828674739,
+        "lam": 0.006521151711619699,
+        "pooled_sd": 0.06729470690562282,
+        "per_channel_sd": [
+          0.06729470690562282
+        ],
+        "n_points": 50,
+        "n_pairs": 100,
+        "point_seed": 9004,
+        "inflation": 1.2
+      }
+    }
+  },
+  "calibration_window_calls": 712,
+  "calibration_raw_evals": 12072,
+  "calibration_no_window_fraction": 0.00390625,
+  "streams": {
+    "calibration": "[9010, i]",
+    "replicates": "[9011, 1, j]"
+  },
+  "wall_s": 636.970394161
+}

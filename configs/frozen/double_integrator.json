@@ -1,0 +1,106 @@
+{
+ "registration": "CONTEXT/plans/double-integrator-coverage.md",
+ "frozen_utc": "2026-10-23T04:11:53.983113+00:00",
+ "environment": {
+  "kind": "double-integrator",
+  "u_max": 1.0,
+  "p_range": [
+   0.0,
+   0.5
+  ],
+  "v_range": [
+   0.0,
+   1.0
+  ],
+  "c_range": [
+   0.0,
+   1.5
+  ],
+  "x_dim": 2,
+  "m": 1,
+  "c_off_closed_form": "u_max - v^2 / (2 (1 - p))",
+  "oracle_note": "expensive oracle simulated by closed form",
+  "raw_evals_per_call": 1
+ },
+ "truth": {
+  "theta_unit_analytic": 0.6666666666666666,
+  "theta_physical_analytic": 1.0,
+  "theta_unit_midpoint_grid": 0.6666661481044737,
+  "theta_unit_including_face": 0.6666666666666666,
+  "stated_error": 0.0,
+  "grid_underestimate": 5.185621929637563e-07,
+  "columns_viable_at_c_max": 0,
+  "columns_viable_at_c_min": 160801,
+  "n_columns": 160801,
+  "theta_unit": 0.6666666666666666
+ },
+ "acceptance": {
+  "crossing_ok": true,
+  "prefix_ok": true,
+  "learnability_r2": 0.9999997597194501,
+  "norm_ladder_fixed_lengthscale": {
+   "5^2": 8.417774763193654,
+   "9^2": 10.080679846472249,
+   "13^2": 10.936133196842166,
+   "17^2": 11.6340067609095,
+   "21^2": 12.220171486734483
+  },
+  "certificate_conditions": [
+   {
+    "c_unit": 0.7,
+    "binding_margin": 0.09512947325274622,
+    "required_sd": 0.0042917574489423245,
+    "second_order_cells": 207.89998567034715
+   },
+   {
+    "c_unit": 0.75,
+    "binding_margin": 0.2378236831318657,
+    "required_sd": 0.010729393622355818,
+    "second_order_cells": 83.1599942681388
+   },
+   {
+    "c_unit": 0.8,
+    "binding_margin": 0.3805178930109852,
+    "required_sd": 0.017167029795769312,
+    "second_order_cells": 51.97499641758672
+   },
+   {
+    "c_unit": 0.9,
+    "binding_margin": 0.6659063127692239,
+    "required_sd": 0.030042302142596285,
+    "second_order_cells": 29.699997952906717
+   },
+   {
+    "c_unit": 1.0,
+    "binding_margin": 0.9512947325274625,
+    "required_sd": 0.04291757448942326,
+    "second_order_cells": 20.7899985670347
+   }
+  ]
+ },
+ "calibration": {
+  "n_cal": 512,
+  "seeds": {
+   "sobol": 9001,
+   "uniform": 9002,
+   "split": 9003
+  },
+  "scaler_scale": [
+   0.35039964159972947
+  ],
+  "lengthscale": 1.0146321793283504,
+  "lam": 1e-06,
+  "inflation": 2.0,
+  "mu_norm": 11.082810991123258,
+  "B": [
+   22.165621982246517
+  ],
+  "B_slice": [
+   20.111974799131485
+  ],
+  "r2_holdout": [
+   0.9999997597194501
+  ],
+  "R": 0.0
+ }
+}

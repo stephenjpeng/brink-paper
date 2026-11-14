@@ -1,0 +1,47 @@
+# Where each stage reads the results of earlier stages.
+#
+# "<latest>" matches the newest run directory results/<UTC timestamp>_<name>, so a
+# replication that runs the stages in the order of the README needs no edits here.
+# To use a particular run (for example, the authors' stored runs), replace an entry
+# with its path. A list entry combines the rows of several directories (sweep parts).
+
+# Double integrator
+double_integrator_sweep: results/<latest>_double_integrator_sweep
+double_integrator_certified: results/<latest>_double_integrator_certified
+
+# Transmission network
+transmission_truth: results/<latest>_transmission_truth
+transmission_designs: results/<latest>_transmission_designs
+transmission_columns: results/<latest>_transmission_columns
+transmission_monotone: results/<latest>_transmission_monotone_check
+transmission_sweep: results/<latest>_transmission_sweep
+
+# Distribution network (feeder)
+feeder_truth: results/<latest>_feeder_truth
+feeder_designs: results/<latest>_feeder_designs
+feeder_columns: results/<latest>_feeder_columns
+feeder_monotone: results/<latest>_feeder_monotone_check
+feeder_sweep: results/<latest>_feeder_sweep
+
+# Hopper
+hopper_truth: results/<latest>_hopper_truth
+hopper_designs: results/<latest>_hopper_designs
+hopper_columns: results/<latest>_hopper_columns
+hopper_desk_check: results/<latest>_hopper_desk_check
+hopper_sweep: results/<latest>_hopper_sweep
+
+# Covasim (list every part when the sweep ran as several parts)
+covasim_truth: results/<latest>_covasim_truth
+covasim_designs: results/<latest>_covasim_designs
+covasim_columns: results/<latest>_covasim_columns
+covasim_monotone: results/<latest>_covasim_monotone_check
+covasim_sweep:
+  - results/<latest>_covasim_sweep
+
+# Check layer
+check_layer_feeder: results/<latest>_check_layer_feeder_sweep
+check_layer_hopper: results/<latest>_check_layer_hopper_sweep
+
+# GP-UCB and differential evolution (list every part)
+adaptive_baselines:
+  - results/<latest>_adaptive_baselines_transmission_feeder_hopper_covasim_part0of1

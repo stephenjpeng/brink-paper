@@ -1,0 +1,61 @@
+[project]
+name = "brink"
+version = "1.0.0"
+description = "BRINK (Bounds from Rejected INfeasible designs with Kernel regression): L4DC experiments."
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "Vineet Jagadeesan Nair" },
+    { name = "Stephen Peng" },
+    { name = "Arun Ravindran" },
+]
+requires-python = ">=3.11"
+dependencies = [
+    "covasim>=3.1,<4",
+    "gymnasium[mujoco]>=1.4.0",
+    "matplotlib>=3.11.2",
+    "mujoco>=3.17.0",
+    "numpy>=2.4.6",
+    "pandapower>=3.5.6",
+    "pandas>=2.3,<3",
+    "pyyaml>=6.0.3",
+    "scipy>=1.17.1",
+    "torch>=2.15.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.6",
+    "stable-baselines3>=2.9.2",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/brink"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "SIM", "D"]
+# N803/N806: allow uppercase mathematical names (X, A, B_t) in scientific code.
+ignore = ["N803", "N806"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["D"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["brink"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+filterwarnings = ["ignore::DeprecationWarning:pandapower.*"]

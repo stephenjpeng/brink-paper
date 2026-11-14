@@ -1,0 +1,3 @@
+# Cross-study comparison (scripts/method_comparison.py). The run inputs come from
+# configs/runs.yaml; nothing reruns.
+target_label: witness-focused   # efficiency target: its median final L at the top budget

@@ -1,0 +1,60 @@
+# Distribution network (CIGRE MV feeder): constants of every run in the paper.
+# Study key in stored rows and exhibit configs: s3.
+frozen_environment: configs/frozen/feeder.json
+k_snapshots: 16            # one check (raw evaluation) = one 16-condition mean predicate
+
+budgets_raw: [5000, 17000]
+seeds: {start: 500, stop: 550}   # 500 to 549
+
+arms:                      # methods, in sweep order
+  - {label: witness-focused, name: existence-witness-focused, view: window}
+  - {label: greedy, name: existence-bracket-greedy, view: window}
+  - {label: config, name: joint-config-existence, view: window}
+  - {label: baseline-k16, name: uncertified-sup-bisection, view: predicate, snapshots: 16}
+  - {label: baseline-k64, name: uncertified-sup-bisection, view: predicate, snapshots: 64}
+  - {label: baseline-k256, name: uncertified-sup-bisection, view: predicate, snapshots: 256}
+arm_constants:
+  n_init: 20
+  report_every_calls: 10   # window arms
+  report_every_raw: 170    # predicate arms
+  n_candidates: 2048
+  n_witness_candidates: 2048
+  report_grid_size: 201
+  delta: 0.10
+  variant: noisy
+  bisect_depth: 8
+  cover_n_per_axis: 8
+  blas_threads: 1
+  end_scan: {max_depth: 12, max_cells: 8000000, cap_s: 480}   # one test per run
+
+columns:                   # sampled designs behind U_eps (Appendix C.6)
+  n: 628
+  design_stream: [998, 0]
+  rough_snapshots: 1024
+  rough_index_base: 3000000   # truth_column stream default_rng([991, base + i])
+  ladder_step: 0.01
+  ladder_rungs: 8
+  test_snapshots: 65536
+  test_stream: [998, 2]       # rung j of column i: default_rng([998, 2, i, j])
+  clip: [-1.0, 2.0]
+  delta_score: 0.05
+  eps: [0.01, 0.05]           # primary, secondary
+  delta_order: 0.05
+
+monotone_check:            # persistence check on further designs
+  n_designs: 256
+  stream: [998, 8]
+  c_grid_points: 21
+  snapshots: 1024
+  se_multiplier: 3.0
+
+truth_check: {snapshots: 4096, stream_offset: 1000}   # design check of each run
+
+
+gates:                     # internal gate tests of analyze, n = 50 per cell
+  g1_violation_delta: 0.10
+  g1_witness_feasible_min: 0.95
+  g2_witness_rate_null: 0.85
+  g3_wrong_rate_null: 0.5
+  alpha: 0.05
+  hardened_gap_tolerance: 0.03

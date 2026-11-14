@@ -1,0 +1,25 @@
+# Evaluation dimensions behind the decision and stopping results of Appendix D
+# (scripts/evaluation_dimensions.py). Inputs are the runs named in configs/runs.yaml;
+# nothing reruns. Stress values
+# below are physical: offset + scale * unit stress, with the offsets and scales of
+# configs/paper_figures.yaml.
+paper_figures_config: configs/paper_figures.yaml
+
+# T3: a returned design whose own last feasible stress lies less than this share of
+# the stress range above its reported level counts as having little stress slack.
+slack_buffer_frac: 0.01
+
+# T5 (a): target stresses, physical units. Double integrator: disturbance bound;
+# s2 and s5: multiplier; s3: demand growth in percent; s4: payload in kg. Hopper
+# targets above its best verified design (12.5 kg) are not scored, because that
+# reference is only a lower bound on the limit.
+targets:
+  s6b: [0.990, 0.995, 0.999, 1.001, 1.005]
+  s2: [1.20, 1.21, 1.22, 1.23, 1.24]
+  s3: [5, 8, 10, 15, 20, 25]
+  s4: [4, 6, 8, 10, 12]
+  s5: [1.8, 2.0, 2.2, 2.4, 2.8, 3.0]
+
+# T5 (b): on the double integrator, stop a run at its first report whose U - L is at
+# most this share of the stress range.
+stop_tolerance_frac: [0.01, 0.005, 0.0025]

@@ -1,0 +1,61 @@
+# Hopper (MuJoCo, pretrained SAC policy): constants of every run in the paper.
+# Study key in stored rows and exhibit configs: s4. Reported runs used x86-64.
+frozen_environment: configs/frozen/hopper.json
+policy_zip_sha256: 79157a5e47acb2a89d272891d3573040ab2638f592f440989365638084a3fd54
+c_range_kg: [0.0, 20.0]
+
+budgets_raw: [2000, 6000]       # one raw evaluation = one 1000-step rollout
+seeds: {start: 700, stop: 750}  # 700 to 749
+
+arms:                           # methods, in sweep order
+  - {label: witness-focused, name: existence-witness-focused, view: window}
+  - {label: greedy, name: existence-bracket-greedy, view: window}
+  - {label: config, name: joint-config-existence, view: window}
+  - {label: sup-bisection, name: uncertified-sup-bisection, view: predicate}
+  - {label: direct-score, name: uncertified-direct-score, view: score}
+arm_constants:
+  n_init: 20
+  report_every_calls: 10        # window arms
+  report_every_raw: 170         # predicate and score arms
+  n_candidates: 2048
+  n_witness_candidates: 2048
+  report_grid_size: 201
+  delta: 0.10
+  variant: deterministic
+  bisect_depth: 8
+  blas_threads: 1
+
+checks:
+  reset_seed: 0                 # the fixed initial state of every rollout check
+  robustness_reset_seeds: [1, 2, 3, 4, 5, 6, 7, 8]
+
+truth:                          # best-design search behind the 12.5 kg reference
+  grid_axis: 15                 # face-inclusive
+  coarse: 33
+  bisect: 10
+  refine_half_widths: [0.07142857142857142, 0.017857142857142856, 0.004464285714285714]
+  refine_points_per_axis: 5
+  refine_top_k: 4
+
+columns:                        # sampled designs (Appendix C.6)
+  n: 628
+  design_stream: [996, 0]
+  grid_points: 201
+  margin: 0.1                   # Delta
+  eps: [0.01, 0.05]             # primary, secondary
+  delta_order: 0.05
+
+desk_check:                     # finer scan that tests the 2 kg margin
+  n_designs: 256
+  stream: [996, 8]
+  fine_step: 0.001
+  fine_below: 0.005
+  fine_above_margin: 0.05
+
+
+
+gates:                          # internal gate tests of analyze, n = 50 per cell
+  g1_violation_delta: 0.10
+  g1_witness_feasible_min: 0.95
+  g2_witness_rate_null: 0.85
+  alpha: 0.05

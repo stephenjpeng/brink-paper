@@ -1,0 +1,16 @@
+# Double integrator: intervals recomputed with certified constants (Appendix B).
+# The run settings of each path (budget-1000 variance-seeking rule, cover, grid,
+# design candidates) come from build_cfg in scripts/double_integrator_sweep.py.
+arm: existence-bracket-greedy
+budget: 1000
+select_seeds: [399]              # not a reported seed; chooses (B, eta, lam)
+report_seeds: {start: 400, stop: 450}   # range(400, 450), the sweep seeds
+checkpoints: [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
+witness_stream_tag: 19           # rng([seed, 19, n]) draws fresh witness candidates
+candidates:                      # certified_mismatch_constants grid
+  n_centers: [8, 12, 16, 24]
+  pad: [0.0, 0.5]
+  nugget: [1.0e-10, 1.0e-8, 1.0e-6]
+  n_check: 2048                  # sup-bound grid per axis
+lam_cert: [1.0e-6, 1.0e-4, 1.0e-2]
+stop_multiplier: 10.0            # stop if B + eta sqrt(1000 / lam) > 10 x fitted B

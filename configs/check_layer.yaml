@@ -1,0 +1,39 @@
+# Check layer (Appendix C.7) on the feeder (s3) and Hopper (s4) studies.
+# Method constants, environments, and references come from each base_config.
+seeds: {start: 900, stop: 950}     # 900 to 949, 50 per cell
+arms: [witness-focused, sup-bisection]   # method labels, in sweep order
+gate_check_stream_offset: 3000     # gate check stream index = offset + task index
+
+gates:                             # internal gate tests, exact one-sided binomial, n = 50
+  alpha: 0.05
+  g1a_tested_rate_null: 0.85       # >= 47 of 50 tested designs rejects it
+  g1b_violation_delta: 0.10        # >= 10 of 50 violating runs rejects it (fails)
+  g1b_feasible_min: 0.95           # gate-check feasible fraction of tested designs
+  g2_sign_null: 0.5                # S3 only: >= 32 of 50 pairs rejects it
+
+s3:
+  base_config: configs/feeder.yaml
+  arm_labels: {witness-focused: witness-focused, sup-bisection: baseline-k16}
+  budget_total_raw: 17000          # proposer runs at total - n_max * raw_per_check
+  layer:                           # the check layer
+    check_snapshots: 4096
+    raw_per_check: 256             # 4096 / K, K = 16 snapshots per raw evaluation
+    n_max: 12                      # reserve 3,072 raw
+    step0: 0.02
+    resolution: 0.005
+    c_min: 0.0
+    c_max: 1.0
+    stream_prefix: 995             # check k (1-based): default_rng([995, task index, k])
+  eb: {p: 0.01, clip: [-1.0, 2.0]} # co-reported empirical-Bernstein verdict at the gate check
+
+s4:
+  base_config: configs/hopper.yaml
+  arm_labels: {witness-focused: witness-focused, sup-bisection: sup-bisection}
+  budget_total_raw: 6000
+  layer:                           # check: the fixed-state rollout (reset seed 0)
+    raw_per_check: 1
+    n_max: 64                      # reserve 64 rollouts
+    step0: 0.02                    # 0.4 kg
+    resolution: 0.0005             # 0.01 kg
+    c_min: 0.0
+    c_max: 1.0
